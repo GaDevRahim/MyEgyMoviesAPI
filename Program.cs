@@ -20,6 +20,8 @@ namespace MyEgyMoviesAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,6 +32,8 @@ namespace MyEgyMoviesAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseAuthorization();
 
