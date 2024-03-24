@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyEgyMoviesAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5797611829b26d8129766de36117fc77f807a6ab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+efb48e68a20495866897289083239aa3e87d18ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyEgyMoviesAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyEgyMoviesAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

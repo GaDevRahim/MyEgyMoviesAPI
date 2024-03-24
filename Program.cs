@@ -31,6 +31,7 @@ namespace MyEgyMoviesAPI
                 app.UseSwaggerUI();
             }
 
+            
             app.UseHttpsRedirection();
 
             app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());

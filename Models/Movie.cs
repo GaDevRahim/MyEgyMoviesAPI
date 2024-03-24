@@ -18,11 +18,10 @@ namespace MyEgyMoviesAPI.Models
         public double Rate { get; set; }
 
         [Required]
-        public byte[]? Poster { get; set; }
+        public byte[] Poster { get; set; }
 
-        public  byte GendreId { get; set; }
-
-        [ForeignKey(nameof(GendreId))]
-        public Genre? Genre { get; set; }
+        public  byte GenreId { get; set; }
+  
+        public Genre Genre { get; set; }
     }
 }

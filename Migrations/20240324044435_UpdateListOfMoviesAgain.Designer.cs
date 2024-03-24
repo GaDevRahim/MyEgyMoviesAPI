@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyEgyMoviesAPI.Models;
 
@@ -10,9 +11,11 @@ using MyEgyMoviesAPI.Models;
 namespace MyEgyMoviesAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240324044435_UpdateListOfMoviesAgain")]
+    partial class UpdateListOfMoviesAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,12 +83,17 @@ namespace MyEgyMoviesAPI.Migrations
             modelBuilder.Entity("MyEgyMoviesAPI.Models.Movie", b =>
                 {
                     b.HasOne("MyEgyMoviesAPI.Models.Genre", "Genre")
-                        .WithMany()
+                        .WithMany("Movies")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Genre");
+                });
+
+            modelBuilder.Entity("MyEgyMoviesAPI.Models.Genre", b =>
+                {
+                    b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
         }
