@@ -1,29 +1,25 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MyEgyMoviesAPI.Dtos;
-using MyEgyMoviesAPI.Models;
-using System.Reflection.Metadata;
-
-namespace MyEgyMoviesAPI.Controllers
+﻿namespace MyEgyMoviesAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IMoviesService _moviesService;
+        private readonly IGenresService _genreService;
         private List<string> allowsExten = new List<string> { ".png", ".jpg" };
         private int allowMaxSize = 1048576;
 
-        public MoviesController(ApplicationDbContext context)
+        public MoviesController(IMoviesService moviesService, IGenresService genreService)
         {
-            this._context = context;
+            this._moviesService = moviesService;
+            this._genreService = genreService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllMovies()
         {
-            
-            var movies = await _context.Movies.Include(m => m.Genre).ToListAsync();
+
+            var movies = await _moviesService.GetAll();
             
             return Ok(movies);
         }
@@ -31,7 +27,7 @@ namespace MyEgyMoviesAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMovieDetials(int id)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == id);
+            var movie = await _moviesService.GetByID(id);
 
             if (movie == null)
                 return NotFound($"Not Found That ID : {id}");
@@ -51,7 +47,7 @@ namespace MyEgyMoviesAPI.Controllers
             if (movieDto.Poster.Length > allowMaxSize)
                 return BadRequest("Max allowed size for poster is 1MB!");
 
-            bool isCorrectGenreId = await _context.Genres.AnyAsync(g => g.Id == movieDto.GenreId);
+            bool isCorrectGenreId = await _genreService.isCorrectId(movieDto.GenreId);
 
             if (!isCorrectGenreId)
                 return BadRequest($"Invalid genere ID! {isCorrectGenreId}");
@@ -69,20 +65,19 @@ namespace MyEgyMoviesAPI.Controllers
                 Poster = stream.ToArray(),
             };
 
-            await _context.AddAsync(movie);
-            _context.SaveChanges();
+            await _moviesService.Add(movie);
             return Ok(movie);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMovieData(int id, [FromForm] MovieDto movieDto)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _moviesService.GetByID(id);
 
             if (movie == null)
                 return NotFound($"No movie was found with ID {id}");
 
-            bool isCorrectGenreId = await _context.Genres.AnyAsync(g => g.Id == movieDto.GenreId);
+            bool isCorrectGenreId = await _genreService.isCorrectId(movieDto.GenreId);
             if (!isCorrectGenreId)
                 return BadRequest($"Invalid genere ID! {isCorrectGenreId}");
 
@@ -106,19 +101,18 @@ namespace MyEgyMoviesAPI.Controllers
             movie.Rate = movieDto.Rate;
             movie.GenreId = movieDto.GenreId;
 
-            _context.SaveChanges();
+            _moviesService.Update(movie);
             return Ok(movie);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
-            var movie = await _context.Movies.SingleOrDefaultAsync(m => m.Id == id);
+            var movie = await _moviesService.GetByID(id);
             if (movie == null)
                 return NotFound($"No movie was found with ID {id}");
 
-            _context.Movies.Remove(movie);
-            _context.SaveChanges();
+            _moviesService.Delete(movie);
 
             return Ok(movie);
         }

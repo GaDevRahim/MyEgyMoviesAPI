@@ -1,6 +1,3 @@
-
-using MyEgyMoviesAPI.Models;
-
 namespace MyEgyMoviesAPI
 {
     public class Program
@@ -19,6 +16,9 @@ namespace MyEgyMoviesAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddTransient<IGenresService, GenresService>();
+            builder.Services.AddTransient<IMoviesService, MoviesService>();
 
             builder.Services.AddCors();
 

@@ -1,5 +1,4 @@
-﻿
-namespace MyEgyMoviesAPI.Models
+﻿namespace MyEgyMoviesAPI.Models
 {
     public class Movie
     {
